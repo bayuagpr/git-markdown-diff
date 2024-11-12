@@ -242,5 +242,5 @@ MIT
 ## Acknowledgments
 
 Built with:
-- commander
-- ora
+- [commander](https://www.npmjs.com/package/commander)
+- [ora](https://www.npmjs.com/package/ora)
