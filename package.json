@@ -1,0 +1,23 @@
+{
+  "name": "git-markdown-diff",
+  "version": "0.0.36",
+  "description": "Git diff tool that outputs markdown formatted diffs",
+  "main": "index.js",
+  "bin": {
+    "git-markdown-diff": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "git",
+    "diff",
+    "markdown"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.0.0",
+    "ora": "^8.1.1"
+  }
+}
