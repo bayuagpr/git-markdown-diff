@@ -1,6 +1,21 @@
 # Git Markdown Diff Tool
 
+[![npm version](https://badge.fury.io/js/git-markdown-diff.svg)](https://www.npmjs.com/package/git-markdown-diff)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js Version](https://img.shields.io/node/v/git-markdown-diff.svg)](https://nodejs.org)
+
 A powerful CLI tool that generates beautifully formatted markdown files from git diffs, making code changes more readable and shareable.
+
+## Why?
+
+So GitHub/GitLab/Bitbucket diff views works for you? Good. But sometimes those might be not your remote git provider and/or your diff view from your remote git providers might be not so friendly (at least for your eyes). This tool simply offers an alternative that lets you:
+
+- Generate clean, readable diffs when your remote git provider diff views are unavailable or unfriendly
+- Work completely offline - only needs internet access when comparing remote branches
+- Export diffs as markdown to attach to tickets, docs, or discussions
+- Automatically filter out noise like lockfiles and build artifacts
+- Create permanent documentation snapshots of important changes
+- Share diffs easily with any stakeholders
 
 ## Features
 
@@ -11,6 +26,11 @@ A powerful CLI tool that generates beautifully formatted markdown files from git
 - 📁 Creates an organized directory structure with an index
 - 💡 Support for comparing specific commits, branches, or tags
 - 🚀 Progress indicators for long-running operations
+
+## Requirements
+
+- Node.js >= 18
+- Git installed and accessible from command line
 
 ## Installation
 
@@ -72,6 +92,23 @@ Each generated markdown file includes:
 - Timestamp and timezone information
 - Dark-mode friendly styling
 
+## Example Output
+
+```markdown
+# Changes in `src/components/Button.js`
+
+## File Statistics
+ src/components/Button.js | 25 +++++++++++++++++--------
+
+## Changes
+```diff
+- import React from 'react';
++ import React, { useState } from 'react';
+
+ const Button = ({ label }) => {
++  const [isHovered, setIsHovered] = useState(false);
+```
+
 ## Excluded Files
 
 The tool automatically excludes common files that typically don't need diff review:
@@ -83,6 +120,17 @@ The tool automatically excludes common files that typically don't need diff revi
 - Logs and debug files
 - Environment and secret files
 - Minified files
+
+## Roadmap
+
+Future improvements under consideration:
+
+- [ ] Custom output directory option
+- [ ] HTML export option
+- [ ] Integration with CI/CD pipelines
+- [ ] Custom exclusion patterns
+- [ ] Multiple diff format support
+- [ ] Interactive mode for file selection
 
 ## Contributing
 
@@ -140,31 +188,15 @@ This tool uses several open-source packages:
 
 ### Common Issues
 
-1. **Git command failed**
+1. **Git command fails**
+   ```bash
+   Error: Git command did not succeed. Script cannot proceed.
+   ```
    - Ensure you're in a git repository
-   - Verify git is installed and accessible from command line
+   - Check if git is installed: `git --version`
+   - Verify git is configured: `git config --list`
 
-2. **Permission errors**
-   - Check write permissions in the output directory
-   - Run with appropriate privileges
-
-3. **Memory issues with large repositories**
-   - Tool uses a 10MB buffer for git operations
-   - Consider using specific commit ranges instead of full history
-
-### Getting Help
-
-- Open an issue on GitHub for bugs
-- Start a discussion for feature requests
-- Check existing issues before creating new ones
-
-## Roadmap
-
-Future improvements under consideration:
-
-- [ ] Custom output directory option
-- [ ] HTML export option
-- [ ] Integration with CI/CD pipelines
-- [ ] Custom exclusion patterns
-- [ ] Multiple diff format support
-- [ ] Interactive mode for file selection
+2. **No output generated**
+   - Verify you have changes to diff
+   - Check if files are excluded by default patterns
+   - Try specifying explicit commit ranges

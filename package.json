@@ -12,12 +12,27 @@
   "keywords": [
     "git",
     "diff",
-    "markdown"
+    "markdown",
+    "git-diff",
+    "documentation",
+    "changelog",
+    "development-tools"
   ],
-  "author": "",
+  "author": "Bayu Prakoso",
   "license": "MIT",
   "dependencies": {
     "commander": "^11.0.0",
     "ora": "^8.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bayuagpr/git-markdown-diff.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bayuagpr/git-markdown-diff/issues"
+  },
+  "homepage": "https://github.com/bayuagpr/git-markdown-diff#readme",
+  "engines": {
+    "node": ">=18"
   }
 }
