@@ -2,7 +2,16 @@ const { exec } = require("child_process");
 const util = require("util");
 const execAsync = util.promisify(exec);
 
+/**
+ * Utility functions for git operations related to diff generation
+ * @namespace gitUtils
+ */
 const gitUtils = {
+  /**
+   * Validates that git is installed and the current directory is a git repository
+   * @returns {Promise<boolean>} True if git validation succeeds
+   * @throws {Error} If git command fails, exits process with code 1
+   */
   async validateGit() {
     try {
       await execAsync("git status");
@@ -13,6 +22,13 @@ const gitUtils = {
     }
   },
 
+  /**
+   * Gets list of files changed between two git references
+   * @param {string} range - Git range to compare (e.g. "main..feature")
+   * @param {string[]} exclusions - Patterns of files to exclude
+   * @returns {Promise<string[]>} Array of changed file paths
+   * @throws {Error} If git command fails
+   */
   async getChangedFiles(range, exclusions) {
     const excludePatterns = exclusions.map(pattern => `:(exclude)${pattern}`).join(' ');
     const { stdout: filesOutput } = await execAsync(
@@ -22,11 +38,24 @@ const gitUtils = {
     return filesOutput.split("\n").filter(Boolean);
   },
 
+  /**
+   * Gets total change statistics between two git references
+   * @param {string} range - Git range to compare
+   * @returns {Promise<string>} Summary of total insertions/deletions
+   * @throws {Error} If git command fails
+   */
   async getTotalStats(range) {
     const { stdout } = await execAsync(`git diff ${range} --shortstat`);
     return stdout;
   },
 
+  /**
+   * Gets change statistics for a specific file
+   * @param {string} file - Path to the file
+   * @param {string} range - Git range to compare
+   * @returns {Promise<string>} Summary of file's insertions/deletions
+   * @throws {Error} If git command fails
+   */
   async getFileInfo(file, range) {
     const { stdout } = await execAsync(
       `git diff ${range} --stat -- "${file}"`,
@@ -35,6 +64,14 @@ const gitUtils = {
     return stdout;
   },
 
+  /**
+   * Gets the diff output for a specific file
+   * @param {string} file - Path to the file
+   * @param {string} range - Git range to compare
+   * @param {('diff'|'unified'|'side-by-side')} [format='diff'] - Diff output format
+   * @returns {Promise<string>} Formatted diff output
+   * @throws {Error} If git command fails
+   */
   async getFileDiff(file, range, format = 'diff') {
     const formatFlags = {
       'diff': '',
@@ -50,6 +87,13 @@ const gitUtils = {
     return stdout;
   },
 
+  /**
+   * Gets commit messages between two git references
+   * @param {string} endRange - Starting git reference
+   * @param {string} startRange - Ending git reference
+   * @returns {Promise<string>} Formatted commit messages
+   * @throws {Error} If git command fails
+   */
   async getCommitMessages(endRange, startRange) {
     const { stdout } = await execAsync(
       `git log --pretty=format:"- %s (%h)" ${endRange}..${startRange}`
@@ -58,4 +102,4 @@ const gitUtils = {
   }
 };
 
-module.exports = gitUtils; 
+module.exports = gitUtils;

@@ -10,9 +10,12 @@
 **Stop squinting at those git provider diff views.**
 <br>
 Generate beautiful, searchable, IDE-friendly git diffs in markdown format.
+<br>
+<br>
+![Demo GIF showing diff generation](docs/demo-gitloom-diff.gif)
 </div>
 
-![Demo GIF showing diff generation]() <!-- Add demo gif -->
+<br>
 
 > ⚠️ **Early Stage Project**: GitLoom Diff is currently in active development and not yet production-ready. Expect frequent breaking changes and major updates as we evolve the tool. Use with caution in production environments.
 

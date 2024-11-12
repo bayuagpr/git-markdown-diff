@@ -3,6 +3,32 @@
 const { program } = require("commander");
 const GitLoomDiff = require("../sdk/GitLoomDiff");
 
+/**
+ * Configures and runs the GitLoomDiff CLI program.
+ * 
+ * Command line options:
+ * @param {string} [options.startRef] - Starting git reference (commit/branch/tag) to compare from
+ * @param {string} [options.endRef] - Ending git reference to compare to
+ * @param {string} [options.output=git-diffs] - Directory to output the diff files
+ * @param {string[]} [options.exclude] - File patterns to exclude from the diff
+ * @param {string} [options.format=diff] - Diff format:
+ *   - 'diff': Traditional git diff format
+ *   - 'unified': Unified diff format
+ *   - 'side-by-side': Two column comparison view
+ * @param {boolean} [options.lightMode=false] - Use light mode theme instead of dark
+ * 
+ * Default behavior:
+ * - Compares current branch against 'main' if no refs provided
+ * - Outputs to './git-diffs' directory
+ * - Uses dark mode theme
+ * - Shows traditional diff format
+ * 
+ * The program generates markdown files containing:
+ * - Syntax highlighted code diffs
+ * - File change statistics
+ * - Commit history between refs
+ * - Navigation links between files
+ */
 program
   .name("gitloom-diff")
   .description("Generate markdown-formatted git diffs")
