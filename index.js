@@ -180,7 +180,7 @@ class GitMarkdownDiff {
 
       spinner.text = "Writing index file...";
       fs.writeFileSync(
-        path.join(this.outputDir, "README.md"),
+        path.join(this.outputDir, "DIFF_INDEX.md"),
         index.join("\n")
       );
 
