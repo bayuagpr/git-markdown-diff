@@ -1,10 +1,10 @@
 const gitUtils = require('./utils/gitUtils');
 const fsUtils = require('./utils/fsUtils');
-const EXCLUSIONS = require('./constants/gitExclusions');
+const Config = require('./config/Config');
 
 class GitMarkdownDiff {
-  constructor(outputDir = "git-diffs") {
-    this.outputDir = outputDir;
+  constructor(options = {}) {
+    this.config = new Config(options);
   }
 
   async run(startRange, endRange) {
@@ -13,21 +13,21 @@ class GitMarkdownDiff {
 
     try {
       await gitUtils.validateGit();
-      fsUtils.cleanupOutputDir(this.outputDir);
+      fsUtils.cleanupOutputDir(this.config.outputDir);
       
       const range = this.#buildGitRange(startRange, endRange);
       
       spinner.text = "Getting list of changed files...";
-      const changedFiles = await gitUtils.getChangedFiles(range, EXCLUSIONS);
+      const changedFiles = await gitUtils.getChangedFiles(range, this.config.getExclusions());
       const totalStats = await gitUtils.getTotalStats(range);
       
       const index = await this.#buildIndexContent(startRange, endRange, totalStats, range);
       await this.#processFiles(changedFiles, range, spinner, index);
       
       spinner.text = "Writing index file...";
-      fsUtils.writeIndexFile(this.outputDir, index.join("\n"));
+      fsUtils.writeIndexFile(this.config.outputDir, index.join("\n"));
 
-      spinner.succeed(`Diffs saved to ${this.outputDir}/`);
+      spinner.succeed(`Diffs saved to ${this.config.outputDir}/`);
     } catch (error) {
       spinner.fail("Failed to generate diffs");
       console.error(error);
@@ -43,7 +43,7 @@ class GitMarkdownDiff {
       const fileInfo = await gitUtils.getFileInfo(file, range);
       const content = await this.#generateFileContent(file, range, fileInfo);
       
-      fsUtils.saveFile(this.outputDir, file, content);
+      fsUtils.saveFile(this.config.outputDir, file, content);
       this.#updateIndex(index, file, fileInfo);
     }
   }
@@ -71,10 +71,10 @@ class GitMarkdownDiff {
   }
 
   async #generateFileContent(file, range, fileInfo) {
-    const diffOutput = await gitUtils.getFileDiff(file, range);
+    const diffOutput = await gitUtils.getFileDiff(file, range, this.config.diffFormat);
 
     return [
-      this.#getCssStyle(),
+      this.config.getCssStyle(),
       `generated at ${new Date().toLocaleString()} (${Intl.DateTimeFormat().resolvedOptions().timeZone})`,
       "",
       `# Changes in \`${file}\``,
@@ -91,24 +91,6 @@ class GitMarkdownDiff {
       "",
       "",
     ].join("\n");
-  }
-
-  #getCssStyle() {
-    return `<!--
-<style>
-.markdown-body .highlight pre, .markdown-body pre {
-  background-color: #0d1117;
-}
-.markdown-body .diff-deletion {
-  color: #f85149;
-  background-color: #3c1618;
-}
-.markdown-body .diff-addition {
-  color: #56d364;
-  background-color: #1b4721;
-}
-</style>
--->`;
   }
 
   #updateIndex(index, file, fileInfo) {

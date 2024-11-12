@@ -34,9 +34,17 @@ const gitUtils = {
     return stdout;
   },
 
-  async getFileDiff(file, range) {
-    const { stdout } = await execAsync(`git diff ${range} -- "${file}"`, {
-      maxBuffer: 10 * 1024 * 1024,
+  async getFileDiff(file, range, format = 'diff') {
+    const formatFlags = {
+      'diff': '',
+      'unified': ' -U3',
+      'side-by-side': ' --side-by-side --width=180'
+    };
+
+    const flag = formatFlags[format] || '';
+    const cmd = `git diff${flag} ${range} -- "${file}"`;
+    const { stdout } = await execAsync(cmd, {
+      maxBuffer: 10 * 1024 * 1024
     });
     return stdout;
   },

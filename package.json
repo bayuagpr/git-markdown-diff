@@ -1,6 +1,6 @@
 {
   "name": "git-markdown-diff",
-  "version": "0.0.39",
+  "version": "0.0.40",
   "description": "Git diff tool that outputs markdown formatted diffs",
   "main": "src/sdk/GitMarkdownDiff.js",
   "bin": {
@@ -20,6 +20,13 @@
   ],
   "author": "Bayu Prakoso",
   "license": "MIT",
+  "files": [
+    "src/sdk/**/*",
+    "src/cli/**/*"
+  ],
+  "exports": {
+    ".": "./src/sdk/GitMarkdownDiff.js"
+  },
   "dependencies": {
     "commander": "^11.0.0",
     "ora": "^8.1.1"

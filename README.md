@@ -8,7 +8,7 @@ A powerful CLI tool that generates beautifully formatted markdown files from git
 
 ## Why?
 
-So GitHub/GitLab/Bitbucket diff views works for you? Good. But sometimes those might be not your remote git provider and/or your diff view from your remote git providers might be not so friendly moreover if you have to review big changes (at least for your eyes). This tool simply offers an alternative that lets you:
+So GitHub/GitLab/Bitbucket diff views works for you? Well good for you! But sometimes those remote git providers might be not your remote git provider and/or your diff view from your remote git providers might be not so friendly moreover if you have to review big changes (at least for your eyes). This tool simply offers an alternative that lets you:
 
 - Generate clean, readable diffs when your remote git provider diff views are unavailable or unfriendly
 - Work completely offline - only needs internet access when comparing remote branches
@@ -32,7 +32,10 @@ So GitHub/GitLab/Bitbucket diff views works for you? Good. But sometimes those m
 - 🎨 Syntax-highlighted diff output
 - 📊 Includes file statistics and change summaries
 - 🔍 Automatic exclusion of common build artifacts and sensitive files
-- 📁 Preserves your repository's directory structure and generates a searchable diff index for easy navigation
+- 📁 Output directory structure mirrors your repository layout with a searchable index file containing:
+  - Total change statistics
+  - Commit messages between compared refs
+  - Links to individual file diffs with change summaries
 - 💡 Support for comparing specific commits, branches, or tags
 - 🚀 Progress indicators for long-running operations
 
@@ -62,20 +65,113 @@ git-markdown-diff
 To generate diffs between specific git references (commits, branches, or tags):
 
 ```bash
-git-markdown-diff <startRef> <endRef>
+git-markdown-diff --start-ref <startRef> --end-ref <endRef>
 ```
 
 Examples:
 ```bash
 # Compare between two commits
-git-markdown-diff abc123 def456
+git-markdown-diff -s abc123 -e def456
 
 # Compare between branches
-git-markdown-diff main feature/new-feature
+git-markdown-diff --start-ref main --end-ref feature/new-feature
 
 # Compare between tags
-git-markdown-diff v1.0.0 v1.1.0
+git-markdown-diff -s v1.0.0 -e v1.1.0
 ```
+
+### Configuration Options
+
+```bash
+Options:
+  -s, --start-ref <ref>      Starting reference (commit hash, branch name, or tag)
+  -e, --end-ref <ref>        Ending reference (commit hash, branch name, or tag)
+  -o, --output <dir>         Output directory (default: "git-diffs")
+  --exclude <patterns>       Additional file patterns to exclude
+  -f, --format <format>      Diff format: diff, unified, side-by-side (default: "diff")
+  --light-mode              Use light mode theme instead of dark mode
+  -h, --help                Display help
+
+# Examples:
+git-markdown-diff -s main -e develop -o custom-diffs    # Custom output directory
+git-markdown-diff --exclude "*.log" "*.tmp"             # Exclude additional files
+git-markdown-diff -s HEAD -e HEAD~1 -f side-by-side     # Side-by-side diff format
+git-markdown-diff -s v1.0 -e v2.0 --light-mode         # Light mode theme
+```
+
+### Programmatic Usage
+
+```javascript
+const GitMarkdownDiff = require('git-markdown-diff');
+
+const differ = new GitMarkdownDiff({
+  outputDir: 'custom-dir',
+  exclusions: ['*.log', '*.tmp'],
+  diffFormat: 'side-by-side',
+  darkMode: false
+});
+
+await differ.run('main', 'feature/branch');
+```
+
+#### Use it in your code:
+```javascript
+// Generate diffs for code review tools
+const GitMarkdownDiff = require('git-markdown-diff');
+
+async function generateReviewDiff(prNumber) {
+  const differ = new GitMarkdownDiff({
+    outputDir: `pr-${prNumber}-diff`,
+    diffFormat: 'side-by-side'
+  });
+  
+  await differ.run('main', `pr-${prNumber}`);
+  return `pr-${prNumber}-diff/README.md`;
+}
+```
+
+#### Git hooks integration:
+```javascript
+// pre-commit hook (/.git/hooks/pre-commit)
+const GitMarkdownDiff = require('git-markdown-diff');
+
+async function preCommitHook() {
+  const differ = new GitMarkdownDiff({
+    outputDir: '.git/diff-preview',
+    diffFormat: 'unified'
+  });
+  
+  // Compare staged changes
+  await differ.run('HEAD', '--staged');
+  // Open diff preview in default browser
+  require('open')('.git/diff-preview/README.md');
+}
+```
+
+#### CI/CD pipeline:
+```javascript
+// GitHub Actions, Jenkins, etc.
+const GitMarkdownDiff = require('git-markdown-diff');
+
+async function generatePRDiff() {
+  const differ = new GitMarkdownDiff({
+    outputDir: 'ci-diff-output',
+    exclusions: ['*.lock', 'dist/*']
+  });
+  
+  // Compare PR branch with target branch
+  await differ.run(process.env.TARGET_BRANCH, process.env.PR_BRANCH);
+  
+  // Upload diff as artifact or send to review system
+  await uploadArtifact('ci-diff-output');
+}
+```
+
+### Diff Formats
+
+- `diff` (default) - Standard git diff format
+- `unified` - Unified diff with 3 lines of context
+- `side-by-side` - Two-column comparison view
 
 ## Output Structure
 
