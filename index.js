@@ -38,7 +38,7 @@ class GitMarkdownDiff {
       this.cleanupOutputDir();
 
       spinner.text = "Getting list of changed files...";
-      const range = startRange && endRange ? `${startRange}..${endRange}` : "";
+      const range = startRange && endRange ? `${endRange}..${startRange}` : "";
       const exclusions = [
         // Package manager locks
         ":!package-lock.json",
@@ -104,7 +104,7 @@ class GitMarkdownDiff {
       // Add commit messages if a range is specified
       if (startRange && endRange) {
         const { stdout: commitMessages } = await execAsync(
-          `git log --pretty=format:"- %s (%h)" ${startRange}..${endRange}`
+          `git log --pretty=format:"- %s (%h)" ${endRange}..${startRange}`
         );
         index.push(commitMessages + "\n\n## Changed Files\n");
       } else {
