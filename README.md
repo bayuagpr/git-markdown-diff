@@ -8,14 +8,23 @@ A powerful CLI tool that generates beautifully formatted markdown files from git
 
 ## Why?
 
-So GitHub/GitLab/Bitbucket diff views works for you? Good. But sometimes those might be not your remote git provider and/or your diff view from your remote git providers might be not so friendly (at least for your eyes). This tool simply offers an alternative that lets you:
+So GitHub/GitLab/Bitbucket diff views works for you? Good. But sometimes those might be not your remote git provider and/or your diff view from your remote git providers might be not so friendly moreover if you have to review big changes (at least for your eyes). This tool simply offers an alternative that lets you:
 
 - Generate clean, readable diffs when your remote git provider diff views are unavailable or unfriendly
 - Work completely offline - only needs internet access when comparing remote branches
 - Export diffs as markdown to attach to tickets, docs, or discussions
+- Share diffs with AI/LLM tools (ChatGPT, Claude, Copilot, etc.) to streamline code review, get suggestions, and catch potential issues
 - Automatically filter out noise like lockfiles and build artifacts
 - Create permanent documentation snapshots of important changes
 - Share diffs easily with any stakeholders
+- Use your IDE/editor's search and navigation features to analyze the generated diffs:
+  - Search across all diff files to find specific changes
+  - Use "Find in Files" to locate impacted code patterns
+  - Leverage file tree navigation to browse changes by directory
+  - Take advantage of markdown preview to view formatted diffs
+  - Use split view to compare original and modified code side by side
+  - Bookmark key changes for later review
+
 
 ## Features
 
@@ -23,7 +32,7 @@ So GitHub/GitLab/Bitbucket diff views works for you? Good. But sometimes those m
 - 🎨 Syntax-highlighted diff output
 - 📊 Includes file statistics and change summaries
 - 🔍 Automatic exclusion of common build artifacts and sensitive files
-- 📁 Creates an organized directory structure with an index
+- 📁 Preserves your repository's directory structure and generates a searchable diff index for easy navigation
 - 💡 Support for comparing specific commits, branches, or tags
 - 🚀 Progress indicators for long-running operations
 

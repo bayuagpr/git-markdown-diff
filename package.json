@@ -2,9 +2,9 @@
   "name": "git-markdown-diff",
   "version": "0.0.38",
   "description": "Git diff tool that outputs markdown formatted diffs",
-  "main": "index.js",
+  "main": "src/sdk/GitMarkdownDiff.js",
   "bin": {
-    "git-markdown-diff": "./index.js"
+    "git-markdown-diff": "./src/cli/index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
