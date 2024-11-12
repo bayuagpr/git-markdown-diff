@@ -1,6 +1,6 @@
 {
   "name": "git-markdown-diff",
-  "version": "0.0.38",
+  "version": "0.0.39",
   "description": "Git diff tool that outputs markdown formatted diffs",
   "main": "src/sdk/GitMarkdownDiff.js",
   "bin": {
