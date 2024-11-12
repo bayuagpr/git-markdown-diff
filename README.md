@@ -10,20 +10,22 @@ A powerful CLI tool that generates beautifully formatted markdown files from git
 
 So GitHub/GitLab/Bitbucket diff views works for you? Well good for you! But sometimes those remote git providers might be not your remote git provider and/or your diff view from your remote git providers might be not so friendly moreover if you have to review big changes (at least for your eyes). This tool simply offers an alternative that lets you:
 
-- Generate clean, readable diffs when your remote git provider diff views are unavailable or unfriendly
-- Work completely offline - only needs internet access when comparing remote branches
-- Export diffs as markdown to attach to tickets, docs, or discussions
-- Share diffs with AI/LLM tools (ChatGPT, Claude, Copilot, etc.) to streamline code review, get suggestions, and catch potential issues
-- Automatically filter out noise like lockfiles and build artifacts
-- Create permanent documentation snapshots of important changes
-- Share diffs easily with any stakeholders
-- Use your IDE/editor's search and navigation features to analyze the generated diffs:
-  - Search across all diff files to find specific changes
-  - Use "Find in Files" to locate impacted code patterns
-  - Leverage file tree navigation to browse changes by directory
-  - Take advantage of markdown preview to view formatted diffs
-  - Use split view to compare original and modified code side by side
-  - Bookmark key changes for later review
+- Generate clean, readable diffs when GitHub/GitLab/Bitbucket or any other git provider diff views are unavailable or hard to use
+- Work offline - only requires internet for comparing remote branches
+- Export diffs as markdown files to:
+  - Attach to tickets and documentation
+  - Share with AI tools (ChatGPT, Claude, etc.) for code review assistance
+  - Create permanent snapshots of important changes
+  - Share easily with stakeholders
+- Smart filtering of noise like lockfiles and build artifacts
+- Editor-agnostic - works with any tool that supports markdown
+- Leverage your IDE's features to analyze diffs:
+  - Full-text search across all changes
+  - "Find in Files" for code patterns
+  - File tree navigation by directory
+  - Markdown preview for formatted diffs
+  - Side-by-side diff comparison
+  - Bookmarking for later review
 
 
 ## Features
@@ -54,7 +56,7 @@ npm install -g git-markdown-diff
 
 ### Basic Usage
 
-To generate diffs between your working tree and the last commit:
+Generate diffs between your working tree and the last commit:
 
 ```bash
 git-markdown-diff
@@ -62,10 +64,10 @@ git-markdown-diff
 
 ### Comparing Specific References
 
-To generate diffs between specific git references (commits, branches, or tags):
+Compare changes between any git references (commits, branches, or tags):
 
 ```bash
-git-markdown-diff --start-ref <startRef> --end-ref <endRef>
+git-markdown-diff --start-ref <ref> --end-ref <ref>
 ```
 
 Examples:
@@ -73,31 +75,58 @@ Examples:
 # Compare between two commits
 git-markdown-diff -s abc123 -e def456
 
-# Compare between branches
-git-markdown-diff --start-ref main --end-ref feature/new-feature
+# Compare between branches (changes in feature branch)
+git-markdown-diff -s feature/branch -e main
 
-# Compare between tags
-git-markdown-diff -s v1.0.0 -e v1.1.0
+# Compare between tags (changes from v1.0.0 to v1.1.0)
+git-markdown-diff -s v1.1.0 -e v1.0.0
+
+# Compare with remote branch
+git-markdown-diff -s origin/main -e main
+
+# Compare staged changes
+git-markdown-diff -s HEAD -e --staged
 ```
 
 ### Configuration Options
 
 ```bash
 Options:
-  -s, --start-ref <ref>      Starting reference (commit hash, branch name, or tag)
-  -e, --end-ref <ref>        Ending reference (commit hash, branch name, or tag)
+  -s, --start-ref <ref>      Starting reference (newer state)
+  -e, --end-ref <ref>        Ending reference (older state)
   -o, --output <dir>         Output directory (default: "git-diffs")
-  --exclude <patterns>       Additional file patterns to exclude
+  --exclude <patterns...>    Additional file patterns to exclude
   -f, --format <format>      Diff format: diff, unified, side-by-side (default: "diff")
   --light-mode              Use light mode theme instead of dark mode
   -h, --help                Display help
-
-# Examples:
-git-markdown-diff -s main -e develop -o custom-diffs    # Custom output directory
-git-markdown-diff --exclude "*.log" "*.tmp"             # Exclude additional files
-git-markdown-diff -s HEAD -e HEAD~1 -f side-by-side     # Side-by-side diff format
-git-markdown-diff -s v1.0 -e v2.0 --light-mode         # Light mode theme
 ```
+
+### Advanced Examples
+
+```bash
+# Custom output directory with side-by-side diffs
+git-markdown-diff -s main -e develop -o pr-123-diffs -f side-by-side
+
+# Exclude specific files/patterns
+git-markdown-diff --exclude "*.test.js" "docs/**" "*.md"
+
+# Compare specific commit range with unified diff
+git-markdown-diff -s HEAD -e HEAD~5 -f unified
+
+# Light mode theme with custom output
+git-markdown-diff -s release -e main --light-mode -o release-diffs
+
+# Multiple options combined
+git-markdown-diff \
+  -s feature/new-ui \
+  -e develop \
+  -o ui-changes \
+  -f side-by-side \
+  --exclude "*.test.js" "*.snap" \
+  --light-mode
+```
+
+> **Note**: The order of refs matters! Use `-s` for the newer state and `-e` for the older state to get the correct diff direction.
 
 ### Programmatic Usage
 
@@ -179,11 +208,11 @@ The tool creates a `git-diffs` directory with the following structure:
 
 ```
 git-diffs/
-├── README.md                 # Index file with summary and links
-├── src/                      # Mirrors your repository structure
-│   ├── file1.js.md          # Diff for file1.js
+├── DIFF_INDEX.md            # Index file with summary and links
+├── src/                     # Mirrors your repository structure
+│   ├── file1.js.md         # Diff for file1.js
 │   └── components/
-│       └── Component.js.md   # Diff for Component.js
+│       └── Component.js.md  # Diff for Component.js
 └── ...
 ```
 
@@ -230,11 +259,11 @@ The tool automatically excludes common files that typically don't need diff revi
 
 Future improvements under consideration:
 
-- [ ] Custom output directory option
+- [x] Custom output directory option
 - [ ] HTML export option
 - [ ] Integration with CI/CD pipelines
-- [ ] Custom exclusion patterns
-- [ ] Multiple diff format support
+- [x] Custom exclusion patterns
+- [x] Multiple diff format support
 - [ ] Interactive mode for file selection
 
 ## Contributing
@@ -300,8 +329,15 @@ This tool uses several open-source packages:
    - Ensure you're in a git repository
    - Check if git is installed: `git --version`
    - Verify git is configured: `git config --list`
+   - On Windows, ensure paths don't contain special characters
 
 2. **No output generated**
    - Verify you have changes to diff
-   - Check if files are excluded by default patterns
+   - Check if files are excluded by default patterns (see Excluded Files section)
    - Try specifying explicit commit ranges
+   - Ensure your git range is correct (e.g., `master..feature` vs `feature..master`)
+
+3. **Exclusion patterns not working**
+   - Use forward slashes (/) even on Windows
+   - Wildcards need proper escaping: `\*.log` or `"*.log"`
+   - For directories, use `dir/**` to exclude all subdirectories

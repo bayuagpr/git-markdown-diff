@@ -14,8 +14,9 @@ const gitUtils = {
   },
 
   async getChangedFiles(range, exclusions) {
+    const excludePatterns = exclusions.map(pattern => `:(exclude)${pattern}`).join(' ');
     const { stdout: filesOutput } = await execAsync(
-      `git diff ${range} --name-only -- . ${exclusions}`,
+      `git diff ${range} --name-only -- . ${excludePatterns}`,
       { maxBuffer: 10 * 1024 * 1024 }
     );
     return filesOutput.split("\n").filter(Boolean);
