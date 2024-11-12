@@ -2,10 +2,11 @@ const gitUtils = require('./utils/gitUtils');
 const fsUtils = require('./utils/fsUtils');
 const Config = require('./config/Config');
 
-class GitMarkdownDiff {
+class GitLoomDiff {
   constructor(options = {}) {
     this.config = new Config(options);
   }
+
 
   async run(startRange, endRange) {
     const { default: ora } = await import("ora");
@@ -99,4 +100,4 @@ class GitMarkdownDiff {
   }
 }
 
-module.exports = GitMarkdownDiff; 
+module.exports = GitLoomDiff; 

@@ -1,8 +1,8 @@
-# Git Markdown Diff Tool
+# GitLoom Diff
 
-[![npm version](https://badge.fury.io/js/git-markdown-diff.svg)](https://www.npmjs.com/package/git-markdown-diff)
+[![npm version](https://badge.fury.io/js/gitloom-diff.svg)](https://www.npmjs.com/package/gitloom-diff)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js Version](https://img.shields.io/node/v/git-markdown-diff.svg)](https://nodejs.org)
+[![Node.js Version](https://img.shields.io/node/v/gitloom-diff.svg)](https://nodejs.org)
 
 **Stop squinting at those git provider diff views.** Generate beautiful, searchable, IDE-friendly git diffs in markdown format.
 
@@ -11,13 +11,13 @@
 ## Quick Start
 
 ```bash
-npm install -g git-markdown-diff
+npm install -g gitloom-diff
 
 # Basic usage
-git-markdown-diff 
+gitloom-diff 
 
 # Compare branches
-git-markdown-diff -s feature/awesome -e main
+gitloom-diff -s feature/awesome -e main
 ```
 
 ## Why You'll Love This
@@ -96,19 +96,19 @@ GitHub, GitLab, or any other git provider diffs can be hard to parse - especiall
 
 ```bash
 # Compare commits
-git-markdown-diff -s abc123 -e def456
+gitloom-diff -s abc123 -e def456
 
 # Compare branches
-git-markdown-diff -s feature/branch -e main
+gitloom-diff -s feature/branch -e main
 
 # Compare tags
-git-markdown-diff -s v1.1.0 -e v1.0.0
+gitloom-diff -s v1.1.0 -e v1.0.0
 
 # Compare with remote
-git-markdown-diff -s origin/main -e main
+gitloom-diff -s origin/main -e main
 
 # Compare staged changes
-git-markdown-diff -s HEAD -e --staged
+gitloom-diff -s HEAD -e --staged
 ```
 
 ### Configuration
@@ -128,13 +128,13 @@ Options:
 
 ```bash
 # Side-by-side diff with custom output
-git-markdown-diff -s main -e develop -o pr-123-diffs -f side-by-side
+gitloom-diff -s main -e develop -o pr-123-diffs -f side-by-side
 
 # Exclude patterns
-git-markdown-diff --exclude "*.test.js" "docs/**"
+gitloom-diff --exclude "*.test.js" "docs/**"
 
 # Multiple options
-git-markdown-diff \
+gitloom-diff \
   -s feature/new-ui \
   -e develop \
   -o ui-changes \
@@ -146,9 +146,9 @@ git-markdown-diff \
 ## Programmatic Usage
 
 ```javascript
-const GitMarkdownDiff = require('git-markdown-diff');
+const GitLoomDiff = require('gitloom-diff');
 
-const differ = new GitMarkdownDiff({
+const differ = new GitLoomDiff({
   outputDir: 'custom-dir',
   exclusions: ['*.log'],
   diffFormat: 'side-by-side',
@@ -163,7 +163,7 @@ await differ.run('main', 'feature/branch');
 ```javascript
 // Code Review Tool Integration
 async function generateReviewDiff(prNumber) {
-  const differ = new GitMarkdownDiff({
+  const differ = new GitLoomDiff({
     outputDir: `pr-${prNumber}-diff`
   });
   await differ.run('main', `pr-${prNumber}`);
@@ -171,13 +171,13 @@ async function generateReviewDiff(prNumber) {
 
 // Git Hook Integration
 async function preCommitHook() {
-  const differ = new GitMarkdownDiff();
+  const differ = new GitLoomDiff();
   await differ.run('HEAD', '--staged');
 }
 
 // CI/CD Pipeline
 async function generatePRDiff() {
-  const differ = new GitMarkdownDiff({
+  const differ = new GitLoomDiff({
     exclusions: ['*.lock', 'dist/*']
   });
   await differ.run(process.env.TARGET_BRANCH, process.env.PR_BRANCH);
