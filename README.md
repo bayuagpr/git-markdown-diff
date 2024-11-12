@@ -1,4 +1,5 @@
 <div align="center">
+<img src="docs/header.jpg" alt="GitLoom Diff Header" width="100%" />
 
 # GitLoom Diff
 
@@ -6,13 +7,14 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/node/v/gitloom-diff.svg)](https://nodejs.org)
 
+**Stop squinting at those git provider diff views.**
+<br>
+Generate beautiful, searchable, IDE-friendly git diffs in markdown format.
 </div>
 
-> ⚠️ **Early Stage Project**: GitLoom Diff is currently in active development and not yet production-ready. Expect frequent breaking changes and major updates as we evolve the tool. Use with caution in production environments.
-
-**Stop squinting at those git provider diff views.** Generate beautiful, searchable, IDE-friendly git diffs in markdown format.
-
 ![Demo GIF showing diff generation]() <!-- Add demo gif -->
+
+> ⚠️ **Early Stage Project**: GitLoom Diff is currently in active development and not yet production-ready. Expect frequent breaking changes and major updates as we evolve the tool. Use with caution in production environments.
 
 ## Quick Start
 
