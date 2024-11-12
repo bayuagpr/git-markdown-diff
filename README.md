@@ -1,5 +1,5 @@
 <div align="center">
-<img src="docs/header.jpg" alt="GitLoom Diff Header" width="100%" />
+<img src="docs/header.jpg" alt="GitLoom Diff Header" height="200" />
 
 # GitLoom Diff
 
