@@ -1,8 +1,12 @@
+<div align="center">
+
 # GitLoom Diff
 
 [![npm version](https://badge.fury.io/js/gitloom-diff.svg)](https://www.npmjs.com/package/gitloom-diff)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/node/v/gitloom-diff.svg)](https://nodejs.org)
+
+</div>
 
 > ⚠️ **Early Stage Project**: GitLoom Diff is currently in active development and not yet production-ready. Expect frequent breaking changes and major updates as we evolve the tool. Use with caution in production environments.
 
