@@ -14,6 +14,7 @@ class GitLoomDiff {
    * @param {string[]} [options.exclude=[]] - File patterns to exclude from the diff
    * @param {string} [options.format='diff'] - Diff format (diff, unified, side-by-side)
    * @param {boolean} [options.darkMode=true] - Whether to use dark mode theme
+   * @param {string} [options.mode='pr'] - Diff mode ('pr' or 'commit')
    */
   constructor(options = {}) {
     this.config = new Config(options);
@@ -32,6 +33,11 @@ class GitLoomDiff {
 
     try {
       await gitUtils.validateGit();
+      
+      // Add remote fetch handling
+      spinner.text = "Fetching latest remote changes...";
+      await this.#fetchRemoteChanges(startRange, endRange);
+      
       fsUtils.cleanupOutputDir(this.config.outputDir);
       
       const range = this.#buildGitRange(startRange, endRange);
@@ -45,8 +51,20 @@ class GitLoomDiff {
       
       spinner.text = "Writing index file...";
       fsUtils.writeIndexFile(this.config.outputDir, index.join("\n"));
-
+      
       spinner.succeed(`Diffs saved to ${this.config.outputDir}/`);
+      
+      // Add summary of generated content
+      console.log('\nGenerated content:');
+      console.log(`- Index file: ${this.config.outputDir}/DIFF_INDEX.md`);
+      console.log(`- Total files processed: ${changedFiles.length}`);
+      console.log(`- Files generated:`);
+      console.log(`  ${this.config.outputDir}/`);
+      console.log(`  ├── DIFF_INDEX.md`);
+      changedFiles.forEach((file, i) => {
+        const prefix = i === changedFiles.length - 1 ? '  └──' : '  ├──';
+        console.log(`${prefix} ${file}.md`);
+      });
     } catch (error) {
       spinner.fail("Failed to generate diffs");
       console.error(error);
@@ -84,7 +102,11 @@ class GitLoomDiff {
    * @private
    */
   #buildGitRange(startRange, endRange) {
-    return startRange && endRange ? `${endRange}..${startRange}` : "";
+    if (!startRange || !endRange) return "";
+    
+    return this.config.mode === 'pr' 
+      ? `${endRange}..${startRange}`   // For PR branches: target..source
+      : `${startRange}...${endRange}`; // For commit hashes: start...end
   }
 
   /**
@@ -154,6 +176,24 @@ class GitLoomDiff {
   #updateIndex(index, file, fileInfo) {
     const stats = fileInfo.match(/(\d+) insertion.+(\d+) deletion/)?.[0] || "No changes";
     index.push(`- [${file}](./${file}.md) - ${stats}`);
+  }
+
+  /**
+   * Fetches latest changes from specified remote
+   * @param {string} startRange - Starting git reference (commit/branch/tag)
+   * @param {string} endRange - Ending git reference to compare against
+   * @returns {Promise<void>}
+   * @throws {Error} If git fetch fails
+   */
+  async #fetchRemoteChanges(startRange, endRange) {
+    const remotes = new Set([
+      await gitUtils.getRemote(startRange),
+      await gitUtils.getRemote(endRange)
+    ].filter(Boolean));
+
+    for (const remote of remotes) {
+      await gitUtils.fetchRemote(remote);
+    }
   }
 }
 

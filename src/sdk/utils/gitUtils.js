@@ -99,6 +99,40 @@ const gitUtils = {
       `git log --pretty=format:"- %s (%h)" ${endRange}..${startRange}`
     );
     return stdout;
+  },
+
+  /**
+   * Fetches latest changes from specified remote
+   * @param {string} remote - Remote name (e.g. 'origin')
+   * @returns {Promise<void>}
+   * @throws {Error} If git fetch fails
+   */
+  async fetchRemote(remote) {
+    await execAsync(`git fetch ${remote}`);
+  },
+
+  /**
+   * Checks if reference is a remote branch
+   * @param {string} ref - Git reference to check
+   * @returns {string|null} Remote name if remote branch, null otherwise
+   */
+  async getRemote(ref) {
+    if (!ref) return null;
+    
+    try {
+      const { stdout: remotes } = await execAsync('git remote');
+      const remotesList = remotes.trim().split('\n');
+      const remoteMatch = ref.match(/^([^/]+)\//);
+      
+      if (remoteMatch && remotesList.includes(remoteMatch[1])) {
+        return remoteMatch[1];
+      }
+
+      const { stdout: remote } = await execAsync(`git config --get branch.${ref}.remote`);
+      return remote.trim() || null;
+    } catch {
+      return null;
+    }
   }
 };
 

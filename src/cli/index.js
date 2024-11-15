@@ -2,6 +2,7 @@
 
 const { program } = require("commander");
 const GitLoomDiff = require("../sdk/GitLoomDiff");
+const pkg = require("../../package.json");
 
 /**
  * Configures and runs the GitLoomDiff CLI program.
@@ -29,9 +30,26 @@ const GitLoomDiff = require("../sdk/GitLoomDiff");
  * - Commit history between refs
  * - Navigation links between files
  */
+
+// Add this helper function
+function isCommitHash(ref) {
+  // Git commit hashes are 40 chars or abbreviated to at least 7 chars
+  // and contain only hexadecimal characters
+  return ref && /^[0-9a-f]{7,40}$/i.test(ref);
+}
+
+// Add this branding function
+function showBranding() {
+  console.log(`
+🧶 GitLoom Diff v${pkg.version}
+===============================
+`);
+}
+
 program
   .name("gitloom-diff")
   .description("Generate markdown-formatted git diffs")
+  .version(pkg.version)
   .option("-s, --start-ref <ref>", "Starting reference (commit hash, branch name, or tag)")
   .option("-e, --end-ref <ref>", "Ending reference (commit hash, branch name, or tag)")
   .option("-o, --output <dir>", "Output directory", "git-diffs")
@@ -50,13 +68,20 @@ Examples:
   $ gitloom-diff -s v1.1.0 -e v1.0.0
 
   # Side-by-side diff with custom output
-  $ gitloom-diff -s main -e develop -o pr-diffs -f side-by-side`)
+  $ gitloom-diff -s main -e develop -o pr-diffs -f side-by-side
+
+  # Compare commit hashes
+  $ gitloom-diff -s 1234567890abcdef1234567890abcdef12345678 -e 0987654321fedcba0987654321fedcba09876543`)
   .action(async (options) => {
+    showBranding();
+    
     const config = {
       outputDir: options.output,
       exclusions: options.exclude || [],
       diffFormat: options.format,
-      darkMode: !options.lightMode
+      darkMode: !options.lightMode,
+      // Auto-detect mode based on ref format
+      mode: (isCommitHash(options.startRef) && isCommitHash(options.endRef)) ? 'commit' : 'pr'
     };
     
     const differ = new GitLoomDiff(config);
