@@ -42,11 +42,11 @@ GitHub, GitLab, or any other git provider diffs are often overwhelming - endless
   - Review diffs comfortably
 
 - 🤖 **Feed Directly to AI**
-  - Compatible with any LLM (e.g. ChatGPT, Claude, etc)
+  - Share diffs directly with any LLM (e.g. ChatGPT, Claude, etc)
   - Review changes with integrated AI in your preferred editor (No more copy-paste hell)
   - Let AI help you:
     - Generate PR summaries instantly
-    - Generate commit messages from changes
+    - Generate commit messages, changelog, or release notes from changes
     - Get code review suggestions and explanations
     - Analyze changes for potential bugs and improvements
 
@@ -54,6 +54,12 @@ GitHub, GitLab, or any other git provider diffs are often overwhelming - endless
   - Auto-skips node_modules, build files, and junk
   - Shows only relevant changes
   - Customize exclusion patterns
+
+- 📤 **Share & Reference**
+  - Share clean diffs with team members and stakeholders
+  - Attach as context in tickets and documentation
+  - Create permanent snapshots of changes for future reference
+  - Use in async discussions and code reviews
 
 ## Core Features
 
