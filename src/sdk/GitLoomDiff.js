@@ -14,7 +14,7 @@ class GitLoomDiff {
    * @param {string[]} [options.exclude=[]] - File patterns to exclude from the diff
    * @param {string} [options.format='diff'] - Diff format (diff, unified, side-by-side)
    * @param {boolean} [options.darkMode=true] - Whether to use dark mode theme
-   * @param {string} [options.mode='pr'] - Diff mode ('pr' or 'commit')
+   * @param {string} [options.mode='pr'] - Diff mode ('pr', 'commit', or 'tag')
    */
   constructor(options = {}) {
     this.config = new Config(options);

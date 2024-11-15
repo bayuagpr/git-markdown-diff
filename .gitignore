@@ -41,3 +41,6 @@ Thumbs.db
 *.log
 *.pid
 *.seed
+
+# GitLoom Diff
+/git-diffs

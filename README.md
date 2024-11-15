@@ -33,45 +33,33 @@ gitloom-diff -s feature/awesome -e main
 
 ## Why You'll Love This
 
-GitHub, GitLab, or any other git provider diffs can be hard to parse - especially for large changes. This tool gives you a better diff experience with:
+GitHub, GitLab, or any other git provider diffs are often overwhelming - endless scrolling, no search, and hard to navigate between files. This tool generates clean markdown diffs that you can:
 
-- 🚀 **Beautiful Local Diffs**
-  - Works with any git provider
-  - Syntax highlighting
-  - Clean, consistent formatting
+- 🚀 **Open in Your Favorite IDE/Editor**
+  - Use your IDE's search & navigation
+  - Navigate diffs with familiar codebase structure (follows original file paths)
+  - Get proper syntax highlighting
+  - Review diffs comfortably
 
-- 📝 **Markdown Export Ready For**:
-  - 📄 Documentation & issue tracking
-  - 🤖 AI code review (ChatGPT, Claude)
-  - 📊 PR summaries & release notes
-  - 🔍 Security audits
+- 🤖 **Feed Directly to AI**
+  - Compatible with any LLM (e.g. ChatGPT, Claude, etc)
+  - Review changes with integrated AI in your preferred editor (No more copy-paste hell)
+  - Let AI help you:
+    - Generate PR summaries instantly
+    - Generate commit messages from changes
+    - Get code review suggestions and explanations
+    - Analyze changes for potential bugs and improvements
 
-- 🔧 **Full IDE Power**:
-  - 🔍 Fast full-text search
-  - 🎯 Regex & pattern matching
-  - 🌳 File tree navigation
-  - 🖼️ Rich markdown preview
-  - 🔖 Bookmarking changes
+- 🧹 **Focus on What Matters**
+  - Auto-skips node_modules, build files, and junk
+  - Shows only relevant changes
+  - Customize exclusion patterns
 
-## Features In Detail
+## Core Features
 
-- 📊 **Smart Analysis**
-  - Per-file change statistics
-  - Commit message history
-  - File diff summaries
-  - Progress tracking for large diffs
-
-- 🧹 **Intelligent Filtering**
-  - Excludes build artifacts
-  - Skips dependency files
-  - Removes sensitive data
-  - Customizable patterns
-
-- 💡 **Flexible Comparison**
-  - Between any commits
-  - Across branches
-  - Between tags
-  - With remote branches
+- 💡 **Compare Anything**: branches (local or remote), commits, tags
+- 📊 **Rich Statistics**: changes per file, summaries, commit history
+- 📝 **Markdown Output**: readable, searchable, navigable, shareable
 
 ## Output Structure
 
@@ -106,14 +94,14 @@ GitHub, GitLab, or any other git provider diffs can be hard to parse - especiall
 ### Basic Commands
 
 ```bash
-# Compare commits
-gitloom-diff -s abc123 -e def456
-
-# Compare branches
+# Compare branches (PR mode - default)
 gitloom-diff -s feature/branch -e main
 
-# Compare tags
-gitloom-diff -s v1.1.0 -e v1.0.0
+# Compare tags (use tag mode)
+gitloom-diff -s v1.1.0 -e v1.0.0 -m tag
+
+# Compare commits (use commit mode)
+gitloom-diff -s abc123 -e def456 -m commit
 
 # Compare with remote
 gitloom-diff -s origin/main -e main
@@ -131,6 +119,7 @@ Options:
   -o, --output <dir>         Output directory (default: "git-diffs")
   --exclude <patterns...>    Additional file patterns to exclude
   -f, --format <format>      Diff format: diff|unified|side-by-side
+  -m, --mode <mode>         Comparison mode: pr|commit|tag (default: "pr")
   --light-mode              Use light mode theme
   -h, --help                Display help
 ```
@@ -138,16 +127,17 @@ Options:
 ### Advanced Examples
 
 ```bash
-# Side-by-side diff with custom output
-gitloom-diff -s main -e develop -o pr-123-diffs -f side-by-side
+# Side-by-side tag comparison
+gitloom-diff -s v2.0.0 -e v1.0.0 -m tag -f side-by-side
 
-# Exclude patterns
-gitloom-diff --exclude "*.test.js" "docs/**"
+# Exclude patterns with commit comparison
+gitloom-diff -s abc123 -e def456 -m commit --exclude "*.test.js" "docs/**"
 
 # Multiple options
 gitloom-diff \
   -s feature/new-ui \
   -e develop \
+  -m pr \
   -o ui-changes \
   -f side-by-side \
   --exclude "*.test.js" "*.snap" \

@@ -17,6 +17,7 @@ const pkg = require("../../package.json");
  *   - 'unified': Unified diff format
  *   - 'side-by-side': Two column comparison view
  * @param {boolean} [options.lightMode=false] - Use light mode theme instead of dark
+ * @param {string} [options.mode] - Comparison mode (pr, commit, tag)
  * 
  * Default behavior:
  * - Compares current branch against 'main' if no refs provided
@@ -56,22 +57,29 @@ program
   .option("--exclude <patterns...>", "Additional file patterns to exclude")
   .option("-f, --format <format>", "Diff format (diff, unified, side-by-side)", "diff")
   .option("--light-mode", "Use light mode theme instead of dark mode")
+  .option("-m, --mode <mode>", "Comparison mode (pr, commit, tag)", "pr")
   .addHelpText('after', `
 Examples:
   # Basic usage (current branch vs main)
   $ gitloom-diff
 
-  # Compare branches
+  # Compare branches (PR mode)
   $ gitloom-diff -s feature/awesome -e main
 
-  # Compare tags
-  $ gitloom-diff -s v1.1.0 -e v1.0.0
+  # Compare tags (use -m tag for proper tag comparison)
+  $ gitloom-diff -s v1.1.0 -e v1.0.0 -m tag
+
+  # Compare commits (use -m commit for commit comparison)
+  $ gitloom-diff -s abc123 -e def456 -m commit
 
   # Side-by-side diff with custom output
   $ gitloom-diff -s main -e develop -o pr-diffs -f side-by-side
 
-  # Compare commit hashes
-  $ gitloom-diff -s 1234567890abcdef1234567890abcdef12345678 -e 0987654321fedcba0987654321fedcba09876543`)
+Note:
+  Mode (-m) affects how git compares the references:
+  - pr: Uses double-dot (..) for PR/branch comparison
+  - commit: Uses triple-dot (...) for commit comparison
+  - tag: Uses triple-dot (...) for tag comparison`)
   .action(async (options) => {
     showBranding();
     
@@ -80,8 +88,7 @@ Examples:
       exclusions: options.exclude || [],
       diffFormat: options.format,
       darkMode: !options.lightMode,
-      // Auto-detect mode based on ref format
-      mode: (isCommitHash(options.startRef) && isCommitHash(options.endRef)) ? 'commit' : 'pr'
+      mode: options.mode
     };
     
     const differ = new GitLoomDiff(config);
