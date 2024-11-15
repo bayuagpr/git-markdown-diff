@@ -8,13 +8,11 @@ class Config {
    * @param {Object} options - Configuration options
    * @param {string} [options.outputDir='git-diffs'] - Directory to output the diff files
    * @param {string[]} [options.exclusions=[]] - Additional file patterns to exclude from diff
-   * @param {('diff'|'unified'|'side-by-side')} [options.diffFormat='diff'] - Format for git diff output
    * @param {boolean} [options.darkMode=true] - Whether to use dark mode styling
    */
   constructor(options = {}) {
     this.outputDir = options.outputDir || "git-diffs";
     this.exclusions = options.exclusions || [];
-    this.diffFormat = options.diffFormat || "diff"; // possible values: diff, unified, side-by-side
     this.darkMode = options.darkMode ?? true;
   }
 

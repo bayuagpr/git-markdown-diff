@@ -68,19 +68,11 @@ const gitUtils = {
    * Gets the diff output for a specific file
    * @param {string} file - Path to the file
    * @param {string} range - Git range to compare
-   * @param {('diff'|'unified'|'side-by-side')} [format='diff'] - Diff output format
    * @returns {Promise<string>} Formatted diff output
    * @throws {Error} If git command fails
    */
-  async getFileDiff(file, range, format = 'diff') {
-    const formatFlags = {
-      'diff': '',
-      'unified': ' -U3',
-      'side-by-side': ' --side-by-side --width=180'
-    };
-
-    const flag = formatFlags[format] || '';
-    const cmd = `git diff${flag} ${range} -- "${file}"`;
+  async getFileDiff(file, range) {
+    const cmd = `git diff ${range} -- "${file}"`;
     const { stdout } = await execAsync(cmd, {
       maxBuffer: 10 * 1024 * 1024
     });

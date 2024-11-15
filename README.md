@@ -118,7 +118,6 @@ Options:
   -e, --end-ref <ref>        Ending reference (older state)
   -o, --output <dir>         Output directory (default: "git-diffs")
   --exclude <patterns...>    Additional file patterns to exclude
-  -f, --format <format>      Diff format: diff|unified|side-by-side
   -m, --mode <mode>         Comparison mode: pr|commit|tag (default: "pr")
   --light-mode              Use light mode theme
   -h, --help                Display help
@@ -127,8 +126,8 @@ Options:
 ### Advanced Examples
 
 ```bash
-# Side-by-side tag comparison
-gitloom-diff -s v2.0.0 -e v1.0.0 -m tag -f side-by-side
+# Tag comparison
+gitloom-diff -s v2.0.0 -e v1.0.0 -m tag
 
 # Exclude patterns with commit comparison
 gitloom-diff -s abc123 -e def456 -m commit --exclude "*.test.js" "docs/**"
@@ -139,7 +138,6 @@ gitloom-diff \
   -e develop \
   -m pr \
   -o ui-changes \
-  -f side-by-side \
   --exclude "*.test.js" "*.snap" \
   --light-mode
 ```
@@ -152,7 +150,6 @@ const GitLoomDiff = require('gitloom-diff');
 const differ = new GitLoomDiff({
   outputDir: 'custom-dir',
   exclusions: ['*.log'],
-  diffFormat: 'side-by-side',
   darkMode: false,
   mode: 'pr'
 });

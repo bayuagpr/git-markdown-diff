@@ -12,10 +12,6 @@ const pkg = require("../../package.json");
  * @param {string} [options.endRef] - Ending git reference to compare to
  * @param {string} [options.output=git-diffs] - Directory to output the diff files
  * @param {string[]} [options.exclude] - File patterns to exclude from the diff
- * @param {string} [options.format=diff] - Diff format:
- *   - 'diff': Traditional git diff format
- *   - 'unified': Unified diff format
- *   - 'side-by-side': Two column comparison view
  * @param {boolean} [options.lightMode=false] - Use light mode theme instead of dark
  * @param {string} [options.mode] - Comparison mode (pr, commit, tag)
  * 
@@ -31,13 +27,6 @@ const pkg = require("../../package.json");
  * - Commit history between refs
  * - Navigation links between files
  */
-
-// Add this helper function
-function isCommitHash(ref) {
-  // Git commit hashes are 40 chars or abbreviated to at least 7 chars
-  // and contain only hexadecimal characters
-  return ref && /^[0-9a-f]{7,40}$/i.test(ref);
-}
 
 // Add this branding function
 function showBranding() {
@@ -55,7 +44,6 @@ program
   .option("-e, --end-ref <ref>", "Ending reference (commit hash, branch name, or tag)")
   .option("-o, --output <dir>", "Output directory", "git-diffs")
   .option("--exclude <patterns...>", "Additional file patterns to exclude")
-  .option("-f, --format <format>", "Diff format (diff, unified, side-by-side)", "diff")
   .option("--light-mode", "Use light mode theme instead of dark mode")
   .option("-m, --mode <mode>", "Comparison mode (pr, commit, tag)", "pr")
   .addHelpText('after', `
@@ -72,8 +60,8 @@ Examples:
   # Compare commits (use -m commit for commit comparison)
   $ gitloom-diff -s abc123 -e def456 -m commit
 
-  # Side-by-side diff with custom output
-  $ gitloom-diff -s main -e develop -o pr-diffs -f side-by-side
+  # Diff with custom output
+  $ gitloom-diff -s main -e develop -o pr-diffs
 
 Note:
   Mode (-m) affects how git compares the references:
@@ -86,7 +74,6 @@ Note:
     const config = {
       outputDir: options.output,
       exclusions: options.exclude || [],
-      diffFormat: options.format,
       darkMode: !options.lightMode,
       mode: options.mode
     };

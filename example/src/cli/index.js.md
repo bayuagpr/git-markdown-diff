@@ -42,10 +42,6 @@ index 34daa02..2fa36fa 100644
 + * @param {string} [options.endRef] - Ending git reference to compare to
 + * @param {string} [options.output=git-diffs] - Directory to output the diff files
 + * @param {string[]} [options.exclude] - File patterns to exclude from the diff
-+ * @param {string} [options.format=diff] - Diff format:
-+ *   - 'diff': Traditional git diff format
-+ *   - 'unified': Unified diff format
-+ *   - 'side-by-side': Two column comparison view
 + * @param {boolean} [options.lightMode=false] - Use light mode theme instead of dark
 + * 
 + * Default behavior:

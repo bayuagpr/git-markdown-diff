@@ -41,7 +41,6 @@ index 6634d45..1035615 100644
 +   * @param {Object} options - Configuration options
 +   * @param {string} [options.outputDir='git-diffs'] - Directory to output the diff files
 +   * @param {string[]} [options.exclusions=[]] - Additional file patterns to exclude from diff
-+   * @param {('diff'|'unified'|'side-by-side')} [options.diffFormat='diff'] - Format for git diff output
 +   * @param {boolean} [options.darkMode=true] - Whether to use dark mode styling
 +   */
    constructor(options = {}) {

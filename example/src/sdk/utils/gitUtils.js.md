@@ -94,7 +94,6 @@ index 541dbcf..94ec414 100644
 +   * Gets the diff output for a specific file
 +   * @param {string} file - Path to the file
 +   * @param {string} range - Git range to compare
-+   * @param {('diff'|'unified'|'side-by-side')} [format='diff'] - Diff output format
 +   * @returns {Promise<string>} Formatted diff output
 +   * @throws {Error} If git command fails
 +   */

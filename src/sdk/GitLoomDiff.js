@@ -12,7 +12,6 @@ class GitLoomDiff {
    * @param {Object} options - Configuration options
    * @param {string} [options.outputDir='git-diffs'] - Directory to output the diff files
    * @param {string[]} [options.exclude=[]] - File patterns to exclude from the diff
-   * @param {string} [options.format='diff'] - Diff format (diff, unified, side-by-side)
    * @param {boolean} [options.darkMode=true] - Whether to use dark mode theme
    * @param {string} [options.mode='pr'] - Diff mode ('pr', 'commit', or 'tag')
    */
@@ -144,7 +143,7 @@ class GitLoomDiff {
    * @private
    */
   async #generateFileContent(file, range, fileInfo) {
-    const diffOutput = await gitUtils.getFileDiff(file, range, this.config.diffFormat);
+    const diffOutput = await gitUtils.getFileDiff(file, range);
 
     return [
       this.config.getCssStyle(),
