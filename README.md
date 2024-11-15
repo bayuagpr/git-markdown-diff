@@ -97,6 +97,39 @@ GitHub, GitLab, or any other git provider diffs are often overwhelming - endless
 
 ## Usage
 
+### Installation
+
+```bash
+# Global installation (accessible everywhere)
+npm install -g gitloom-diff
+
+# Local installation (project-specific)
+npm install gitloom-diff
+```
+
+When installed locally, you can add it to your package.json scripts for common workflows:
+```json
+{
+  "scripts": {
+    "diff:main": "gitloom-diff -s HEAD -e main",
+    "diff:staged": "gitloom-diff -s HEAD -e --staged",
+    "pr:diff": "gitloom-diff -s $npm_config_branch -e main"
+  }
+}
+```
+
+Then run:
+```bash
+# Compare current branch with main
+npm run diff:main
+
+# Review staged changes
+npm run diff:staged
+
+# Compare specific branch with main
+npm run pr:diff --branch=feature/awesome
+```
+
 ### Basic Commands
 
 ```bash
