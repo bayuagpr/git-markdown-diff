@@ -1,6 +1,6 @@
 {
   "name": "gitloom-diff",
-  "version": "0.0.44",
+  "version": "0.0.45",
   "description": "Git diff tool that outputs markdown formatted diffs",
   "main": "src/sdk/GitLoomDiff.js",
   "bin": {
