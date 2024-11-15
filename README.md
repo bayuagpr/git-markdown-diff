@@ -153,7 +153,8 @@ const differ = new GitLoomDiff({
   outputDir: 'custom-dir',
   exclusions: ['*.log'],
   diffFormat: 'side-by-side',
-  darkMode: false
+  darkMode: false,
+  mode: 'pr'
 });
 
 await differ.run('main', 'feature/branch');
@@ -165,23 +166,27 @@ await differ.run('main', 'feature/branch');
 // Code Review Tool Integration
 async function generateReviewDiff(prNumber) {
   const differ = new GitLoomDiff({
-    outputDir: `pr-${prNumber}-diff`
+    outputDir: `pr-${prNumber}-diff`,
+    mode: 'pr'
   });
   await differ.run('main', `pr-${prNumber}`);
 }
 
 // Git Hook Integration
 async function preCommitHook() {
-  const differ = new GitLoomDiff();
+  const differ = new GitLoomDiff({
+    mode: 'commit'
+  });
   await differ.run('HEAD', '--staged');
 }
 
-// CI/CD Pipeline
-async function generatePRDiff() {
+// Tag Release Comparison
+async function compareReleases(oldTag, newTag) {
   const differ = new GitLoomDiff({
+    mode: 'tag',
     exclusions: ['*.lock', 'dist/*']
   });
-  await differ.run(process.env.TARGET_BRANCH, process.env.PR_BRANCH);
+  await differ.run(newTag, oldTag);
 }
 ```
 
